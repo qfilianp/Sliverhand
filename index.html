@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Flash Game Player (via Ruffle)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #222;
+            color: #fff;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        #controls {
+            margin-bottom: 20px;
+            background: #333;
+            padding: 15px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+        input[type="file"] {
+            font-size: 16px;
+            color: #fff;
+        }
+        #game-container {
+            width: 800px;
+            height: 600px;
+            margin: 0 auto;
+            background: #000;
+            border: 2px solid #555;
+            border-radius: 4px;
+            position: relative;
+        }
+        /* Ensures the Ruffle player fills the container completely */
+        #game-container ruffle-player {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <!-- Load the official Ruffle player script from a reliable CDN -->
+    <script src="https://unpkg.com"></script>
+</head>
+<body>
+
+    <h1>Upload & Play Flash Games</h1>
+    
+    <div id="controls">
+        <label for="file-input">Select your SWF game file: </label>
+        <input type="file" id="file-input" accept=".swf">
+    </div>
+
+    <!-- The container where the Flash game will be injected -->
+    <div id="game-container"></div>
+
+    <script>
+        // Set up custom configuration for the Ruffle engine
+        window.RufflePlayer = window.RufflePlayer || {};
+        window.RufflePlayer.config = {
+            "allowScriptAccess": false,
+            "autoplay": "on",
+            "unmuteOverlay": "hidden"
+        };
+
+        const fileInput = document.getElementById('file-input');
+        const container = document.getElementById('game-container');
+
+        fileInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Clear out any previous game playing in the container
+            container.innerHTML = '';
+
+            // Initialize the Ruffle engine instance
+            const ruffle = window.RufflePlayer.newest();
+            const player = ruffle.createPlayer();
+            
+            // Append the new player element to our visible box
+            container.appendChild(player);
+
+            // Convert the user's uploaded local file into a usable browser URL object
+            const blobUrl = URL.createObjectURL(file);
+            
+            // Load the converted local file directly into Ruffle
+            player.load(blobUrl).catch(error => {
+                console.error("Ruffle failed to load the file:", error);
+                alert("Error loading the SWF file. It might be corrupted or incompatible.");
+            });
+        });
+    </script>
+
+</body>
+</html>
