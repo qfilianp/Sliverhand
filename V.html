@@ -7,7 +7,7 @@
     <link rel="icon" type="image/jpeg" href="icon.jpg">
     <style>
         body { background: #222; color: #fff; font-family: sans-serif; text-align: center; padding-top: 30px; }
-        #player-container { width: 800px; height: 600px; margin: 20px auto; background: #000; border: 2px solid #444; display: flex; align-items: center; justify-content: center; }
+        #player-container { width: 800px; height: 600px; margin: 20px auto; background: #000; border: 2px solid #444; display: flex; align-items: center; justify-content: center; position: relative; }
         
         /* Loading icon styles */
         .loading-container {
@@ -33,6 +33,33 @@
             font-size: 16px;
             color: #aaa;
         }
+        
+        /* Play button styles */
+        .play-button {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 3px solid #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 50px;
+            color: #fff;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        
+        .play-button:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(1.1);
+        }
+        
+        .play-button:active {
+            transform: scale(0.95);
+        }
     </style>
 </head>
 <body>
@@ -41,7 +68,9 @@
     <p>Select your <strong>SWF</strong> file:</p>
     <input type="file" id="swf-file" accept=".swf">
     
-    <div id="player-container"></div>
+    <div id="player-container">
+        <div class="play-button" id="play-button">▶</div>
+    </div>
 
     <!-- Include Ruffle script -->
     <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
@@ -54,8 +83,10 @@
             const fileURL = URL.createObjectURL(file);
 
             const container = document.getElementById('player-container');
+            const playButton = document.getElementById('play-button');
             
-            // Show custom loading icon with bounce animation
+            // Hide play button and show loading icon
+            playButton.style.display = 'none';
             container.innerHTML = '<div class="loading-container"><img src="icon.jpg" alt="Loading..." class="loading-icon"><div class="loading-text">Loading SWF...</div></div>';
 
             const ruffle = window.RufflePlayer.newest();
