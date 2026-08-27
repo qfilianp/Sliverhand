@@ -1,11 +1,8 @@
-HTML code that lets users play SWF files/Flash games on their own websites by embedding the code. (Basically the Ruffle web demo) 
-I recommend using Google Sites since it's free and lets you easily embed code.
+This is a html file that allows users to play flash game/swf files using ruffle in their web browser. (basically web demo of ruffle but local-ish)
 
-How to use: 
-Simply copy the code in index.html and embed it on your website. 
-(You must own the website or have editing rights)
 
-Or
+I say local-ish because you have to online to access the ruffle code unless you do self hosting.
+The game data does save and there isn't any full screen option.
 
-Play on my GitHub.io page if you don't wanna do all of that, but the official Ruffle web demo page is better, so.
+
 
