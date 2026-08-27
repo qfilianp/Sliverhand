@@ -5,20 +5,29 @@
     <title>Filly's SWF Player</title>
     <style>
         body { background: #222; color: #fff; font-family: sans-serif; text-align: center; padding-top: 30px; }
+        #controls { margin: 20px auto; }
         #player-container { width: 800px; height: 600px; margin: 20px auto; background: #000; border: 2px solid #444; }
+        #player-container.fullscreen { width: 100vw; height: 100vh; margin: 0; border: none; }
+        button { background: #444; color: #fff; border: 1px solid #666; padding: 8px 16px; cursor: pointer; margin: 5px; border-radius: 4px; }
+        button:hover { background: #555; }
     </style>
 </head>
 <body>
 
     <h1>Ruffle SWF Player</h1>
-    <p>Select your <strong>SWF</strong> file:</p>
-    <input type="file" id="swf-file" accept=".swf">
+    <div id="controls">
+        <p>Select your <strong>SWF</strong> file:</p>
+        <input type="file" id="swf-file" accept=".swf">
+        <button id="fullscreen-btn">Fullscreen</button>
+    </div>
     
     <div id="player-container"></div>
 
     <!-- Include Ruffle script -->
     <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
     <script>
+        let isFullscreen = false;
+
         document.getElementById('swf-file').addEventListener('change', function(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -42,6 +51,41 @@
                 backgroundColor: '#000',
                 autoplay: 'on'
             });
+        });
+
+        // Fullscreen button handler
+        document.getElementById('fullscreen-btn').addEventListener('click', function() {
+            const container = document.getElementById('player-container');
+            const controls = document.getElementById('controls');
+            
+            if (!isFullscreen) {
+                container.classList.add('fullscreen');
+                controls.style.display = 'none';
+                isFullscreen = true;
+                this.textContent = 'Exit Fullscreen';
+                
+                // Try to use native fullscreen API if available
+                if (container.requestFullscreen) {
+                    container.requestFullscreen().catch(err => console.log(err));
+                }
+            } else {
+                container.classList.remove('fullscreen');
+                controls.style.display = 'block';
+                isFullscreen = false;
+                this.textContent = 'Fullscreen';
+                
+                // Exit native fullscreen if active
+                if (document.fullscreenElement) {
+                    document.exitFullscreen();
+                }
+            }
+        });
+
+        // Handle ESC key to exit fullscreen
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && isFullscreen) {
+                document.getElementById('fullscreen-btn').click();
+            }
         });
     </script>
 </body>
