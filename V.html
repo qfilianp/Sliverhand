@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Filly's SWF Player</title>
     <!-- Browser Tab Icon (using custom monster icon) -->
-    <link rel="icon" type="image/svg+xml" href="icon.svg">
+    <link rel="icon" type="image/jpeg" href="icon.jpg">
     <style>
         body { background: #222; color: #fff; font-family: sans-serif; text-align: center; padding-top: 30px; }
         #player-container { width: 800px; height: 600px; margin: 20px auto; background: #000; border: 2px solid #444; display: flex; align-items: center; justify-content: center; }
@@ -56,7 +56,7 @@
             const container = document.getElementById('player-container');
             
             // Show custom loading icon with bounce animation
-            container.innerHTML = '<div class="loading-container"><img src="icon.svg" alt="Loading..." class="loading-icon"><div class="loading-text">Loading SWF...</div></div>';
+            container.innerHTML = '<div class="loading-container"><img src="icon.jpg" alt="Loading..." class="loading-icon"><div class="loading-text">Loading SWF...</div></div>';
 
             const ruffle = window.RufflePlayer.newest();
             const player = ruffle.createPlayer();
