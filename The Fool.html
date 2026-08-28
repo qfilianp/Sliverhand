@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Filly's SWF Player</title>
+    <meta charset="utf-8" />
+    <title>Filly's SWF Player (offline)</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text x='50' y='80' font-size='80' text-anchor='middle' dominant-baseline='middle'>🍇</text></svg>">
     <style>
         body { background: #222; color: #fff; font-family: sans-serif; text-align: center; padding-top: 30px; }
@@ -15,7 +15,7 @@
 </head>
 <body>
 
-    <h1>Ruffle SWF Player</h1>
+    <h1>Ruffle SWF Player (offline)</h1>
     <div id="controls">
         <p>Select your <strong>SWF</strong> file:</p>
         <input type="file" id="swf-file" accept=".swf">
@@ -24,8 +24,41 @@
     
     <div id="player-container"></div>
 
-    <!-- Include Ruffle script -->
-    <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
+    <!-- Fetch shim: returns the embedded wasm when Ruffle requests ruffle.wasm -->
+    <script>
+    // Replace __RUFFLE_WASM_BASE64_PLACEHOLDER__ with the single-line base64 of ruffle.wasm
+    const RUFFLE_WASM_BASE64 = "__RUFFLE_WASM_BASE64_PLACEHOLDER__";
+
+    (function installWasmFetchShim() {
+        const originalFetch = window.fetch.bind(window);
+        window.fetch = function(input, init) {
+            try {
+                const url = (typeof input === 'string') ? input : (input && input.url) || '';
+                if (url && url.indexOf('ruffle.wasm') !== -1) {
+                    // decode base64 -> ArrayBuffer
+                    const binary = atob(RUFFLE_WASM_BASE64);
+                    const len = binary.length;
+                    const bytes = new Uint8Array(len);
+                    for (let i = 0; i < len; i++) bytes[i] = binary.charCodeAt(i);
+                    const resp = new Response(bytes, { headers: { 'Content-Type': 'application/wasm' } });
+                    return Promise.resolve(resp);
+                }
+            } catch (err) {
+                console.error('WASM shim error', err);
+            }
+            return originalFetch(input, init);
+        };
+    })();
+    </script>
+
+    <!-- Inline Ruffle JS: replace the comment below with the full contents of ruffle.js.
+         IMPORTANT: if you paste raw JS into here inside <script>...</script>, make sure any
+         literal "</script>" sequences in the JS are escaped as "<\/script>" so the HTML parser
+         doesn't prematurely end the script tag. -->
+    <script>
+    /*__RUFFLE_JS_PLACEHOLDER__*/
+    </script>
+
     <script>
         let isFullscreen = false;
 
@@ -33,20 +66,16 @@
             const file = event.target.files[0];
             if (!file) return;
 
-            // Create a local blob URL for the chosen file
             const fileURL = URL.createObjectURL(file);
-
             const container = document.getElementById('player-container');
-            container.innerHTML = ''; // Clear previous player if any
+            container.innerHTML = ''; // Clear previous player
 
             const ruffle = window.RufflePlayer.newest();
             const player = ruffle.createPlayer();
-            
             player.style.width = '100%';
             player.style.height = '100%';
             container.appendChild(player);
 
-            // Load the local blob URL into Ruffle
             player.load({
                 url: fileURL,
                 backgroundColor: '#000',
@@ -54,7 +83,6 @@
             });
         });
 
-        // Fullscreen button handler
         document.getElementById('fullscreen-btn').addEventListener('click', function() {
             const container = document.getElementById('player-container');
             const controls = document.getElementById('controls');
@@ -64,25 +92,16 @@
                 controls.style.display = 'none';
                 isFullscreen = true;
                 this.textContent = 'Exit Fullscreen';
-                
-                // Try to use native fullscreen API if available
-                if (container.requestFullscreen) {
-                    container.requestFullscreen().catch(err => console.log(err));
-                }
+                if (container.requestFullscreen) container.requestFullscreen().catch(err => console.log(err));
             } else {
                 container.classList.remove('fullscreen');
                 controls.style.display = 'block';
                 isFullscreen = false;
                 this.textContent = 'Fullscreen';
-                
-                // Exit native fullscreen if active
-                if (document.fullscreenElement) {
-                    document.exitFullscreen();
-                }
+                if (document.fullscreenElement) document.exitFullscreen();
             }
         });
 
-        // Handle ESC key to exit fullscreen
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && isFullscreen) {
                 document.getElementById('fullscreen-btn').click();
@@ -90,4 +109,5 @@
         });
     </script>
 </body>
+</html>
 </html>
