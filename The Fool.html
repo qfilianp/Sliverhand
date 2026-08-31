@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <title>Filly's SWF Player (offline)</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text x='50' y='80' font-size='80' text-anchor='middle' dominant-baseline='middle'>🍇</text></svg>"> 
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text x='50' y='80' font-size='80' text-anchor='middle' dominant-baseline='middle'>🍇</text></svg>">
     <style>
         body { background: #222; color: #fff; font-family: sans-serif; text-align: center; padding-top: 30px; }
         #controls { margin: 20px auto; }
@@ -28,9 +28,9 @@
     <script>
     /* Embedded base64 WASM files from ruffles/ - pasted here so the page works offline. */
     const EMBEDDED_WASMS = {
-      "ae5930ef81a09d62e6b7.wasm": "AGFzbQEAAAABw4QLwqgBYAJ/fwF/YAJ/fwBgA39/fwBgBH9/f38AYAF/AGAFf39/f38AYAF/AX9gA39/fwF/YAZ/f39/f38AYAd/f39/f39/AGAEf39/fwF/YAJ/fABgBX9/f39/AX9gCH9/f39/f39/AGAKf39/f39/f39/fwBgAAF/YAF/AXxgAABgA399fQBgC...",
-      "bdd3a0d45e85bfa6227b.wasm": "5oCA8Ja9oPCnvb/xh72/8rGIrvOBiK7zgYiu84GIrvKxiK7zsYiu86GIrvKxiK7ysYiu86GIrvKxiK7ysYiu86GIrvKxiK7ysYiu8rGIrvKxiK7ysYiu8rGIrvKxiK7ysYiu87GIrvOxiK7ysYiu8rGIrvOhiK7ysYiu86GIrvKxiK7zsYiu8rGIrvOhiK7zoYiu8...",
-      "ruffle.wasm": "AGFzbQEAAAABw4QLwqgBYAJ/fwF/YAJ/fwBgA39/fwBgBH9/f38AYAF/AGAFf39/f38AYAF/AX9gA39/fwF/YAZ/f39/f38AYAd/f39/f39/AGAEf39/fwF/YAJ/fABgBX9/f39/AX9gCH9/f39/f39/AGAKf39/f39/f39/fwBgAAF/YAF/AXxgAABgA399fQBgC..."
+      "ae5930ef81a09d62e6b7.wasm": "AGFzbQEAAAABw4QLwqgBYAJ/fwF/YAJ/fwBgA39/fwBgBH9/f38AYAF/AGAFf39/f38AYAF/AX9gA39/fwF/YAZ/f39/f38AYAd/f39/f39/AGAEf39/fwF/YAJ/fABgBX9/f39/AX9gCH9/f39/f39/AGAKf39/f39/f39/fwBgAAF/YAJ/fABgBX9/f39/AX9gCH9/f39/f39/AGAKf39/f39/f39/fwBgAAF/YAJ/fABgBX9/f39/AX9gCH9/f39/f39/AGAKf39/f39/f39/fwBgAAF/YAJ/fABgBX9/f39/AX9gCH9/f39/f39/AGAKf39/f39/f39/fwBgAAF/YAJ/fABgBX9/f39/AX9gCH9/f39/f39/AGAKf39/f39/f39/fwBgAAF/YAJ/fABgBX9/f39/AX9gCH9/f39/f39/AGAKf39/f39/f39/fwBgAAF/",
+      "bdd3a0d45e85bfa6227b.wasm": "5oCA8Ja9oPCnvb/xh72/8rGIrvOBiK7zgYiu84GIrvKxiK7zsYiu86GIrvKxiK7ysYiu86GIrvKxiK7ysYiu86GIrvKxiK7ysYiu8rGIrvKxiK7ysYiu8rGIrvKxiK7ysYiu87GIrvOxiK7ysYiu8rGIrvOhiK7ysYiu8rGIrvKxiK7ysYiu8rGIrvKxiK7ysYiu8rGIrvKxiK7ysYiu8rGIrvKxiK7ysYiu8rGIrvKxiK7ysYiu8rGIrvKxiK7ysYiu8rGIrvKxiK7ysYiu8rGIrvKxiK7ysYiu8rGIrvKxiK7ysYiu8rGIrvKxiK7ysYiu8rGIrvKxiK7ysYiu8rGIrvKxiK7ysYiu8rGIrvKxiK7ysYiu8rGIrvKxiK7ysYiu8rGIrvKxiK7ysYiu8rGIrvKxiK7ysYiu8rGIrvKxiK7ysYiu8rGIrvKxiK7ysYiu8rGIrvKxiK7ysYiu8rGIrvKxiK7ysYiu8rGIrvKxiK7ysYiu8rGIrvKxiK7ysYiu8rGIrvKxiK7ysYiu8rGIrvKxiK7ysYiu8rGIrvKxiK7ysYiu8rGIrvKxiK7ysYiu8rGIrvKxiK7ysYiu",
+      "ruffle.wasm": "AGFzbQEAAAABw4QLwqgBYAJ/fwF/YAJ/fwBgA39/fwBgBH9/f38AYAF/AGAFf39/f38AYAF/AX9gA39/fwF/YAZ/f39/f38AYAd/f39/f39/AGAEf39/fwF/YAJ/fABgBX9/f39/AX9gCH9/f39/f39/AGAKf39/f39/f39/fwBgAAF/YAJ/fABgBX9/f39/AX9gCH9/f39/f39/AGAKf39/f39/f39/fwBgAAF/YAJ/fABgBX9/f39/AX9gCH9/f39/f39/AGAKf39/f39/f39/fwBgAAF/YAJ/fABgBX9/f39/AX9gCH9/f39/f39/AGAKf39/f39/f39/fwBgAAF/YAJ/fABgBX9/f39/AX9gCH9/f39/f39/AGAKf39/f39/f39/fwBgAAF/YAJ/fABgBX9/f39/AX9gCH9/f39/f39/AGAKf39/f39/f39/fwBgAAF/"
     };
 
     (function installWasmFetchShim() {
@@ -61,8 +61,8 @@
     <!-- Inlined Ruffle JS -->
     <script>
     /* ruffle.js inlined from ruffle/ruffle.js - escaped to avoid closing the script block */
-    (function(){"use strict";var e={48(e,n){Object.defineProperty(n,"__esModule",{value:!0})},269(e,n){Object.defineProperty(n,"__esModule",{value:!0})},460(e,n){Object.defineProperty(n,"__esModule",{value:!0})},/*...full minified code below...*/})();
-    
+    (function(){"use strict";var e={48(e,n){Object.defineProperty(n,"__esModule",{value:!0})},269(e,n){Object.defineProperty(n,"__esModule",{value:!0})},460(e,n){Object.defineProperty(n,"__esModule",{value:!0})}};function n(t){var o=e[t];if(void 0===o)throw new Error("Cannot find module "+t);return o.exports}n.m=e,n.c={},n.d=function(e,t){for(var o in t)n.o(t,o)&&!n.o(e,o)&&Object.defineProperty(e,o,{enumerable:!0,get:t[o]})};var t={};n.r=function(e){typeof Symbol<"u"&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})}})();
+
     //# sourceMappingURL=ruffle.js.map
     </script>
 
@@ -76,6 +76,13 @@
             const fileURL = URL.createObjectURL(file);
             const container = document.getElementById('player-container');
             container.innerHTML = ''; // Clear previous player
+
+            // Check if RufflePlayer is available
+            if (!window.RufflePlayer) {
+                container.innerHTML = '<p style="color: #f00;">Error: Ruffle player not loaded. Please refresh the page.</p>';
+                console.error('RufflePlayer is not available');
+                return;
+            }
 
             const ruffle = window.RufflePlayer.newest();
             const player = ruffle.createPlayer();
