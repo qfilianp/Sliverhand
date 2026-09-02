@@ -4,5 +4,6 @@ This is a html file that allows users to play flash game/swf files using ruffle 
 I say local-ish because you have to online to access the ruffle code.
 The html can save data and full screen.
 
+only download V.html not the fool
 
 
